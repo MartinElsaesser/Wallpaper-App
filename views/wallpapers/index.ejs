@@ -1,0 +1,36 @@
+<% layout("_layout") %>
+
+<div class="container pt-big pb-4 w-100 min-h-100">
+  <div class="row">
+    <% let length = wallpapers.length; %>
+    <% let first = Math.floor(length / 4 ), second = Math.floor(length * 2 / 4 ) , third = Math.floor(length * 3 / 4);%>
+    <div class="col-12 col-md-6">
+      <div class="row">
+        <div class="col-12 col-lg-6">
+          <% for(var i = 0; i < first; i++) { %>
+          <%- include("partials/index_imageDisplay", {wallpaper: wallpapers[i]}) %>
+          <% } %>
+        </div>
+        <div class="col-12 col-lg-6">
+          <% for(var i = first; i < second; i++) { %>
+          <%- include("partials/index_imageDisplay", {wallpaper: wallpapers[i]}) %>
+          <% } %>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-md-6">
+      <div class="row">
+        <div class="col-12 col-lg-6">
+          <% for(var i = second; i < third; i++) { %>
+          <%- include("partials/index_imageDisplay", {wallpaper: wallpapers[i]}) %>
+          <% } %>
+        </div>
+        <div class="col-12 col-lg-6">
+          <% for(var i = third; i < length; i++) { %>
+          <%- include("partials/index_imageDisplay", {wallpaper: wallpapers[i]}) %>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

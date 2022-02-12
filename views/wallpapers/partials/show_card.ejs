@@ -1,0 +1,21 @@
+<% let downloadLink = `/wallpapers/${wallpaper._id}/download` %>
+<% let updateLink = `/wallpapers/${wallpaper._id}/update` %>
+<% let deleteLink = `/wallpapers/${wallpaper._id}?_method=DELETE` %>
+<% let {path, description, device, _id } = wallpaper; %>
+
+<div class="card">
+  <img src="<%= path %>" class="card-img-top" alt="...">
+  <div class="card-body">
+    <h5 class="card-title"><%= description %></h5>
+    <p class="card-text"><span class="badge bg-primary"><%= device %></span></p>
+    <div class="d-flex gap-1 flex-column flex-md-row">
+      <a class="btn btn-primary w-100" href="<%= downloadLink %>" role="button"><i class="fa-solid fa-download"></i> Download</a>
+      <div class="hstack gap-1 w-100">
+        <a class="btn btn-warning w-50" href="<%= updateLink %>" role="button"><i class="fa-solid fa-pen"></i> Edit</a>
+        <form action="<%=deleteLink %>" method="POST" class="w-50">
+          <button class="btn btn-danger w-100" role="submit"><i class="fa-solid fa-trash"></i> Delete</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

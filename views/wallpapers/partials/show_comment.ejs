@@ -1,0 +1,17 @@
+<% let deleteLink = `/wallpapers/${wallpaper._id}/comments/${comment._id}?_method=DELETE` %>
+
+<div class="hstack gap-2 align-items-start my-3">
+  <div class="w-10 pt-2">
+    <img src="https://via.placeholder.com/150" class="img-fluid img-rounded" alt="">
+  </div>
+  <div class="col-10 p-0 position-relative">
+    <p class="m-0">
+      <strong>Username</strong>
+      <em class="small "><%= h.moment(comment.created).fromNow() %></em>
+    </p>
+    <p class="m-0"><%= comment.text %></p>
+    <form action="<%= deleteLink %>" class="position-absolute top-0 end-0" method="POST">
+      <button type="submit" class="btn delete"><i class="fa-solid fa-trash"></i></button>
+    </form>
+  </div>
+</div>

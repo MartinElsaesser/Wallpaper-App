@@ -1,0 +1,14 @@
+<% let downloadLink = `/wallpapers/${wallpaper._id}/download` %>
+<% let showLink = `/wallpapers/${wallpaper._id}` %>
+<% let {path, description, device } = wallpaper; %>
+
+<div class="image-display mb-4">
+  <img src="<%= path %>" class="card-img-top" alt="">
+  <div class="overlay">
+    <p class="mb-1"><%= description %></p>
+    <div class="hstack gap-1">
+      <a class="btn btn-sm btn-primary w-100" href="<%= downloadLink %>" role="button"><i class="fa-solid fa-download"></i> Download</a>
+      <a class="btn btn-sm btn-secondary w-100" href="<%= showLink %>" role="button"><i class="fa-solid fa-eye"></i> View image</a>
+    </div>
+  </div>
+</div>

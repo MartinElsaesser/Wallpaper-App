@@ -1,0 +1,47 @@
+<% layout("_layout") %>
+<% let {description, device} = wallpaper; %>
+<% let updateLink = `/wallpapers/${wallpaper._id}?_method=PUT`%>
+<% let backLink = `/wallpapers/${wallpaper._id}`%>
+
+<div class="container pt-big pb-4 w-100 min-h-100">
+  <div class="row">
+    <div class="col-12 col-md-6 offset-md-3">
+      <form action="<%= updateLink %>" enctype="multipart/form-data" method="POST">
+        <div class="mb-3">
+          <label for="description" class="form-label">Description for wallpaper</label>
+          <input name="wallpaper[description]" type="text" class="form-control" id="description" required value="<%= description %>" placeholder="input description for wallpaper ...">
+        </div>
+        <div class="mb-3">
+          <label for="img" class="form-label">Current Wallpaper</label>
+          <div class="d-flex justify-content-center bg-light p-1">
+            <img src="<%= wallpaper.path %>" class="img-small" alt="" id="img" data-src="<%= wallpaper.path %>">
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="file" class="form-label">Update wallpaper</label>
+          <input name="file" type="file" class="form-control" id="file">
+        </div>
+        <div class="mb-3">
+          <label for="device" class="form-label">Update for which the wallpaper is</label>
+          <select name="wallpaper[device]" class="form-select" aria-label="Default select example" id="device">
+            <option value="" disabled>Open this select menu</option>
+            <option value="phone" <%= device === "phone" && "selected"%>>Mobile Phones</option>
+            <option value="tablet" <%= device === "tablet" && "selected"%>>Tablets</option>
+            <option value="desktop" <%= device === "desktop" && "selected"%>>Desktop</option>
+            <option value="desktop-wide" <%= device === "desktop-wide" && "selected"%>>Wide screens/two monitors</option>
+          </select>
+        </div>
+        <div class="hstack gap-1">
+          <button type="submit" class="btn btn-success w-100">
+            <i class="fa-solid fa-check"></i> Submit
+          </button>
+          <a type="button" class="btn btn-secondary w-100" href="<%= backLink %>">
+            <i class="fa-solid fa-ban"></i> Cancel
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<% block('footer').append('<script src="/JS/image.js"></script>') %>

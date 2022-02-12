@@ -1,0 +1,6 @@
+<% if(successes.length || errors.length) { %>
+<div class="toast-container position-fixed bottom-0 end-0 z-index-10 p-3">
+  <%- include("_success", {successes}) %>
+  <%- include("_error", {errors}) %>
+</div>
+<% } %>

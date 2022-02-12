@@ -1,0 +1,32 @@
+<nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/wallpapers">Wallpapers</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#navbar" aria-controls="navbar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Drawer -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="navbar" aria-labelledby="navbar-label">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="navbar-label">Offcanvas</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body">
+        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+          <% for(let {href, name, match} of routes) { %>
+          <% let active = url.match(match) !== null && "active"; %>
+          <li class="nav-item">
+            <a class="nav-link <%= active %>" aria-current="page" href="<%= href %>"><%= name %></a>
+          </li>
+          <% } %>
+        </ul>
+        <form class="d-flex">
+          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+          <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+      </div>
+
+
+    </div>
+  </div>
+</nav>
