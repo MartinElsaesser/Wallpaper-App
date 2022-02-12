@@ -15,10 +15,11 @@ function setLocals(req, res, next) {
 	res.locals.errors = req.flash("error");
 	res.locals.successes = req.flash("success");
 	res.locals.url = req.path;
+	res.locals.query = { ...req.query };
 	res.locals.routes = [
 		{ name: "Home", href: "/", match: /^\/$/ },
 		{ name: "Wallpapers", href: "/wallpapers", match: /^\/wallpapers\/?$/ },
-		{ name: "Upload new Wallpapers", href: "/wallpapers/new", match: /^\/wallpapers\/new\/?$/ },
+		{ name: `Upload new Wallpapers <i class="fa-solid fa-plus"></i>`, href: "/wallpapers/new", match: /^\/wallpapers\/new\/?$/ },
 	]
 	res.locals.title = "Wallpapers"
 	next();

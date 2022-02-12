@@ -1,4 +1,6 @@
-<nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top">
+<% let {description, device} = query %>
+
+<nav class="navbar navbar-light navbar-expand-xl bg-light fixed-top">
   <div class="container-fluid">
     <a class="navbar-brand" href="/wallpapers">Wallpapers</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#navbar" aria-controls="navbar">
@@ -8,7 +10,7 @@
     <!-- Drawer -->
     <div class="offcanvas offcanvas-end" tabindex="-1" id="navbar" aria-labelledby="navbar-label">
       <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="navbar-label">Offcanvas</h5>
+        <h5 class="offcanvas-title" id="navbar-label">Menu</h5>
         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
       </div>
       <div class="offcanvas-body">
@@ -16,13 +18,24 @@
           <% for(let {href, name, match} of routes) { %>
           <% let active = url.match(match) !== null && "active"; %>
           <li class="nav-item">
-            <a class="nav-link <%= active %>" aria-current="page" href="<%= href %>"><%= name %></a>
+            <a class="nav-link <%= active %>" aria-current="page" href="<%= href %>"><%- name %></a>
           </li>
           <% } %>
         </ul>
-        <form class="d-flex">
-          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-success" type="submit">Search</button>
+        <hr>
+        <p class="d-xl-none">Search</p>
+        <form class="d-flex flex-xl-nowrap flex-wrap" method="get" action="/wallpapers">
+          <select name="device" class="form-select w-100 me-xl-2" aria-label="Default select example" id="device">
+            <option value="" <%= device === "" && "selected"%>>All devices</option>
+            <option value="phone" <%= device === "phone" && "selected"%>>Mobile Phones</option>
+            <option value="tablet" <%= device === "tablet" && "selected"%>>Tablets</option>
+            <option value="desktop" <%= device === "desktop" && "selected"%>>Desktop</option>
+            <option value="desktop-wide" <%= device === "desktop-wide" && "selected"%>>Wide screens/two monitors</option>
+          </select>
+          <div class="d-flex w-100">
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="description" value="<%= description %>">
+            <button class="btn btn-outline-success" type="submit">Search</button>
+          </div>
         </form>
       </div>
 

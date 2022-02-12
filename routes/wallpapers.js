@@ -21,8 +21,25 @@ const storage = multer.diskStorage({
 })
 const upload = multer({ storage });
 
+function buildSearchQuery(query) {
+	const devices = ["phone", "tablet", "desktop", "desktop-wide"];
+	const { device, description } = query;
+	const search = {
+		...(devices.includes(device) && { device }),
+		...(description && {
+			description: {
+				$regex: new RegExp(`${description}`, "i")
+			}
+		}
+		)
+	}
+	return search;
+}
+
 router.get("/", wrap(async (req, res) => {
-	const wallpapers = await Wallpaper.find();
+	// build search querry
+	const query = buildSearchQuery({ ...req.query });
+	const wallpapers = await Wallpaper.find(query);
 	const title = "View wallpapers";
 	res.render("wallpapers/index", { wallpapers, title });
 }));
