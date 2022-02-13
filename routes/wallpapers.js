@@ -60,7 +60,7 @@ router.get("/:id/download", wrap(async (req, res) => {
 // TODO: 
 // * validate that form only submits images
 // * validate form fields
-router.post("/", validateWallpaperCreate, uploadPictures.single("file"), validateImage, wrap(async (req, res) => {
+router.post("/", uploadPictures.single("file"), validateWallpaperCreate, validateImage, wrap(async (req, res) => {
 	const { wallpaper } = req.body;
 	const { filename, mimetype } = req.file;
 	const [fileType, fileExtension] = mimetype.split("/");

@@ -1,7 +1,10 @@
-const Joi = require('joi');
 const { comments, wallpapers } = require('./validateSchemas');
 const h = require("./helpers");
 const { FlashError } = require('./utils');
+const absolutePath = require("path").join.bind(null, __dirname);
+const fs = require("fs");
+const { promisify } = require("util");
+const rm = promisify(fs.rm);
 
 function validateComment(req, res, next) {
 	const { error, value } = comments.validate(req.body.comment);
@@ -14,16 +17,24 @@ function validateImage(req, res, next) {
 	next();
 }
 function validateWallpaperCreate(req, res, next) {
-	const { error, value } = wallpapers.validate(req.body.wallpaper);
+	const wallpaper = { ...req.body.wallpaper };
+	const { error, value } = wallpapers.validate(wallpaper);
 	let message = "Check your inputs";
-	if (error) next(new FlashError(message, "/wallpapers/new"));
+	if (error) {
+		if (req.file) rm(absolutePath(`./public/images/${oldWallpaper.fileName}`));
+		next(new FlashError(message, "/wallpapers/new"));
+	}
 	next();
 
 }
 function validateWallpaperEdit(req, res, next) {
-	const { error, value } = wallpapers.validate(req.body.wallpaper);
+	const wallpaper = { ...req.body.wallpaper };
+	const { error, value } = wallpapers.validate(wallpaper);
 	let message = "Check your inputs";
-	if (error) next(new FlashError(message, `/wallpapers/${req.params.id}/edit`));
+	if (error) {
+		if (req.file) rm(absolutePath(`./public/images/${oldWallpaper.fileName}`));
+		next(new FlashError(message, `/wallpapers/${req.params.id}/edit`));
+	}
 	next();
 }
 

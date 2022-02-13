@@ -6,8 +6,10 @@ console.log(select);
 
 form.addEventListener("submit", (e) => {
 	console.log(`"${select.value}"`);
-	if (!select.value) {
-		select.setCustomValidity("Select option")
+	if (select.value === "") {
+		// select.setCustomValidity("Select option")
 		e.preventDefault();
+	} else {
+		form.submit();
 	}
-}, false)
+})
