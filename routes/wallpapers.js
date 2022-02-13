@@ -1,25 +1,15 @@
 const express = require("express");
 const router = express.Router();
 const Wallpaper = require("../models/Wallpaper");
-const { wrap } = require("../utils");
-const multer = require("multer");
+const { wrap, FlashError } = require("../utils");
+const uploadPictures = require("../multer_config");
 const absolutePath = require("path").join.bind(null, __dirname);
-const { v4: uuidv4 } = require('uuid');
 const fs = require("fs");
 const { promisify } = require("util");
 const rm = promisify(fs.rm);
+const { validateWallpaperCreate, validateWallpaperEdit, validateImage } = require("../middleware");
 
-const storage = multer.diskStorage({
-	destination: function (req, file, cb) {
-		cb(null, absolutePath("../public/images"))
-	},
-	filename: function (req, file, cb) {
-		const [type, fileExtension] = file.mimetype.split("/");
-		const uuid = uuidv4();
-		cb(null, `${uuid}.${fileExtension}`)
-	}
-})
-const upload = multer({ storage });
+
 
 function buildSearchQuery(query) {
 	const devices = ["phone", "tablet", "desktop", "desktop-wide"];
@@ -52,10 +42,10 @@ router.get("/:id", wrap(async (req, res) => {
 	const title = `${wallpaper.description}`;
 	res.render("wallpapers/show", { wallpaper, title });
 }));
-router.get("/:id/update", wrap(async (req, res) => {
+router.get("/:id/edit", wrap(async (req, res) => {
 	const wallpaper = await Wallpaper.findById(req.params.id).populate("comments");
 	const title = `${wallpaper.description}`;
-	res.render("wallpapers/update", { wallpaper, title });
+	res.render("wallpapers/edit", { wallpaper, title });
 }));
 router.get("/:id/download", wrap(async (req, res) => {
 	const wallpaper = await Wallpaper.findById(req.params.id);
@@ -65,10 +55,12 @@ router.get("/:id/download", wrap(async (req, res) => {
 	res.download(path, `${wallpaper.description}.${wallpaper.fileExtension}`);
 }));
 
+
+
 // TODO: 
 // * validate that form only submits images
 // * validate form fields
-router.post("/", upload.single("file"), wrap(async (req, res) => {
+router.post("/", validateWallpaperCreate, uploadPictures.single("file"), validateImage, wrap(async (req, res) => {
 	const { wallpaper } = req.body;
 	const { filename, mimetype } = req.file;
 	const [fileType, fileExtension] = mimetype.split("/");
@@ -76,16 +68,18 @@ router.post("/", upload.single("file"), wrap(async (req, res) => {
 	wallpaper.fileName = filename;
 	wallpaper.fileExtension = fileExtension;
 	wallpaper.path = `/images/${filename}`;
+	console.log(wallpaper);
 	await Wallpaper.create(wallpaper);
 	res.redirect("/wallpapers");
 }));
 
-router.put("/:id", upload.single("file"), wrap(async (req, res) => {
+router.put("/:id", validateWallpaperEdit, uploadPictures.single("file"), wrap(async (req, res) => {
 	const { wallpaper } = req.body;
 	// override picture options, if new one was provided
 	if (req.file) {
 		const { filename, mimetype } = req.file;
 		const [fileType, fileExtension] = mimetype.split("/");
+		if (fileType !== "image") throw new FlashError("Your file must be an image", `/wallpapers/${req.params.id}/edit`);
 
 		wallpaper.fileName = filename;
 		wallpaper.fileExtension = fileExtension;

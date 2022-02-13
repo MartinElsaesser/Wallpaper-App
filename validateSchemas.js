@@ -6,6 +6,16 @@ const comments = Joi.object({
 		.required()
 });
 
+const wallpapers = Joi.object({
+	description: Joi.string()
+		.min(5)
+		.required(),
+	device: Joi.string()
+		.valid("phone", "desktop", "desktop-wide", "tablet")
+		.required(),
+});
+
 module.exports = {
-	comments
+	comments,
+	wallpapers
 }

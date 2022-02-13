@@ -1,4 +1,4 @@
-<% let {description, device} = query %>
+<% let {description, device = ""} = query %>
 
 <nav class="navbar navbar-light bg-light fixed-top">
   <div class="container-fluid">
@@ -23,14 +23,14 @@
           <% } %>
         </ul>
         <hr>
-        <p class="d-xl-none">Search</p>
+        <p>Search</p>
         <form class="d-flex flex-wrap gap-2" method="get" action="/wallpapers">
-          <select name="device" class="form-select w-100" aria-label="Default select example" id="device">
-            <option value="" <%= device === "" && "selected"%>>All devices</option>
-            <option value="phone" <%= device === "phone" && "selected"%>>Mobile Phones</option>
-            <option value="tablet" <%= device === "tablet" && "selected"%>>Tablets</option>
-            <option value="desktop" <%= device === "desktop" && "selected"%>>Desktop</option>
-            <option value="desktop-wide" <%= device === "desktop-wide" && "selected"%>>Wide screens/two monitors</option>
+          <select name="device" class="form-select w-100" aria-label="Filter devices">
+            <option value="" <%= h.select(device, "")%>>All devices</option>
+            <option value="phone" <%= h.select(device, "phone")%>>Mobile Phones</option>
+            <option value="tablet" <%= h.select(device, "tablet")%>>Tablets</option>
+            <option value="desktop" <%= h.select(device, "desktop")%>>Desktop</option>
+            <option value="desktop-wide" <%= h.select(device, "desktop-wide")%>>Wide screens/two monitors</option>
           </select>
           <div class="d-flex w-100">
             <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="description" value="<%= description %>">
