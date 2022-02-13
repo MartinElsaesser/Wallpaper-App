@@ -8,7 +8,9 @@ const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const MongoDBStore = require('connect-mongodb-session')(session);
 const { setLocals } = require("./middleware");
-const h = require("./helpers");
+const passport = require("passport");
+require("passport-local"); // YOU NEED THIS, DON'T DELETE IT OR IT WON'T WORK
+const User = require("./models/User");
 
 // view engine
 app.engine('ejs', engine);
@@ -36,17 +38,27 @@ const sessionOpts = {
 	}
 }
 app.use(session(sessionOpts));
+
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(User.createStrategy());
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 app.use(flash());
 app.use(setLocals);
 
-app.get("/", (req, res) => {
-	res.render("index");
-});
 
 const wallpapersRoutes = require("./routes/wallpapers");
 const commentsRoutes = require("./routes/comments");
-app.use("/wallpapers", wallpapersRoutes);
-app.use("/wallpapers/:wallpaperId/comments", commentsRoutes);
+const usersRoutes = require("./routes/users");
+const { isLoggedIn, deleteRedirect } = require("./middleware");
+app.get("/", deleteRedirect, (req, res) => {
+	res.render("index");
+});
+app.use("/", usersRoutes);
+app.use("/wallpapers", deleteRedirect, wallpapersRoutes);
+app.use("/wallpapers/:wallpaperId/comments", deleteRedirect, isLoggedIn, commentsRoutes);
 
 
 const { FlashError } = require("./utils");

@@ -1,0 +1,25 @@
+<% layout("_layout") %>
+
+
+<div class="container pt-big pb-4 w-100 h-100">
+  <div class="d-flex w-100 h-100 justify-content-center align-items-center">
+    <div class="row w-100">
+      <div class="col-12 col-md-8 offset-md-2">
+        <h1>Login</h1>
+        <form method="POST" action="/login">
+          <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input name="username" type="text" class="form-control" id="username" placeholder="input username">
+          </div>
+          <div class="mb-4">
+            <label for="password" class="form-label">Password</label>
+            <input name="password" type="password" class="form-control" id="password" placeholder="input password">
+          </div>
+          <div class="d-grid d-sm-flex justify-content-sm-center">
+            <button type="submit" class="btn btn-primary px-4">Login</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,9 +1,11 @@
 const { comments, wallpapers } = require('./validateSchemas');
 const h = require("./helpers");
-const { FlashError } = require('./utils');
+const { FlashError, wrap } = require('./utils');
 const absolutePath = require("path").join.bind(null, __dirname);
 const fs = require("fs");
 const { promisify } = require("util");
+const Wallpaper = require('./models/Wallpaper');
+const Comment = require('./models/Comment');
 const rm = promisify(fs.rm);
 
 function validateComment(req, res, next) {
@@ -38,18 +40,61 @@ function validateWallpaperEdit(req, res, next) {
 	}
 	next();
 }
+
+function isLoggedIn(req, res, next) {
+	if (!req.isAuthenticated()) {
+		req.session.returnUrl = req.originalUrl;
+		req.session.returnMethod = req.method;
+		console.log({ url: req.originalUrl, method: req.method });
+		req.flash("error", "You need to be logged in to do this");
+		return res.redirect("/login")
+	}
+	next();
+}
+const isWallpaperAuthor = wrap(async (req, res, next) => {
+	const { wallpaperId } = req.params;
+	const wallpaper = await Wallpaper.findById(wallpaperId);
+	if (!wallpaper.user.equals(req.user._id)) {
+		throw new FlashError("You do not have permission to do that!", `/wallpapers/${wallpaperId}`)
+	}
+	next();
+});
+const isCommentAuthor = wrap(async (req, res, next) => {
+	const { id, wallpaperId } = req.params;
+	const comment = await Comment.findById(id);
+	if (!comment.user.equals(req.user._id)) {
+		throw new FlashError("You do not have permission to do that!", `/wallpapers/${wallpaperId}`)
+	}
+	next();
+});
+function deleteRedirect(req, res, next) {
+	delete req.session.returnUrl;
+	delete req.session.returnMethod;
+	next();
+}
+
+function _icon(name, type = "solid") {
+	return `<i class="fa-${type} fa-${name}"></i>`;
+}
+
 function setLocals(req, res, next) {
 	res.locals.h = h;
 	res.locals.errors = req.flash("error");
 	res.locals.successes = req.flash("success");
 	res.locals.url = req.path;
 	res.locals.query = { ...req.query };
+	res.locals.user = req.user;
+	let isLoggedIn = req.isAuthenticated();
 	res.locals.routes = [
-		{ name: "Home", href: "/", match: /^\/$/ },
-		{ name: "Wallpapers", href: "/wallpapers", match: /^\/wallpapers\/?$/ },
-		{ name: `Upload new Wallpapers <i class="fa-solid fa-plus"></i>`, href: "/wallpapers/new", match: /^\/wallpapers\/new\/?$/ },
+		{ name: "Home", href: "/", match: /^\/$/, render: true },
+		{ name: `Wallpapers`, href: "/wallpapers", match: /^\/wallpapers\/?$/, render: true },
+		{ name: `Login ${_icon("arrow-right-to-bracket")}`, href: "/login", match: /^\/login\/?$/, render: !isLoggedIn },
+		{ name: `Register  ${_icon("right-to-bracket")}`, href: "/register", match: /^\/register\/?$/, render: !isLoggedIn },
+		{ name: `Logout  ${_icon("arrow-right-from-bracket")}`, href: "/logout", match: /^\/logout\/?$/, render: isLoggedIn },
+		{ name: `Upload new Wallpaper  ${_icon("image")}`, href: "/wallpapers/new", match: /^\/wallpapers\/new\/?$/, render: isLoggedIn },
 	]
-	res.locals.title = "Wallpapers"
+	res.locals.title = "Wallpapers";
+	req.login = req.logIn = promisify(req.login);
 	next();
 }
 
@@ -58,5 +103,9 @@ module.exports = {
 	setLocals,
 	validateWallpaperCreate,
 	validateWallpaperEdit,
-	validateImage
+	validateImage,
+	isLoggedIn,
+	isWallpaperAuthor,
+	isCommentAuthor,
+	deleteRedirect
 }

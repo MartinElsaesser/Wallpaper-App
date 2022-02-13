@@ -11,6 +11,10 @@ const absolutePath = require("path").join.bind(null, __dirname);
 // * add filenameWithID (use filenameWithID or path)
 // * add file extension
 const wallpaperSchema = new Schema({
+	user: {
+		type: Schema.Types.ObjectId,
+		ref: "User"
+	},
 	path: {
 		type: String,
 		required: true

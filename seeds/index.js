@@ -8,29 +8,37 @@ const { v4: uuidv4 } = require('uuid');
 
 mongoose.connect(process.env.DATABASE);
 
+let user = "62094b79a0c1ec86f779967d";
 const comments = [
 	{
+		user,
 		text: "Really beautiful, indeed"
 	},
 	{
+		user,
 		text: "Great wallpaper, loving it."
 	},
 	{
+		user,
 		text: "This picture looks stunning"
 	},
 	{
+		user,
 		text: "Great pic, my friend"
 	},
 	{
+		user,
 		text: "I have seen better things"
 	},
 	{
+		user,
 		text: "I love nature"
 	},
 ];
 
 let wallpapers = [
 	{
+		user,
 		fileName: "amoled-phone.jpg",
 		path: "",
 		fileExtension: "jpg",
@@ -39,6 +47,7 @@ let wallpapers = [
 		comments: [0]
 	},
 	{
+		user,
 		fileName: "brick-wall.jpg",
 		path: "",
 		fileExtension: "jpg",
@@ -47,6 +56,7 @@ let wallpapers = [
 		comments: [1]
 	},
 	{
+		user,
 		fileName: "earth.jpg",
 		path: "",
 		fileExtension: "jpg",
@@ -55,6 +65,7 @@ let wallpapers = [
 		comments: [2, 3, 4]
 	},
 	{
+		user,
 		fileName: "ford.jpg",
 		path: "",
 		fileExtension: "jpg",
@@ -63,6 +74,7 @@ let wallpapers = [
 		comments: [3]
 	},
 	{
+		user,
 		fileName: "lamborghini.jpg",
 		path: "",
 		fileExtension: "jpg",
@@ -71,6 +83,7 @@ let wallpapers = [
 		comments: [4]
 	},
 	{
+		user,
 		fileName: "landscape.jpg",
 		path: "",
 		fileExtension: "jpg",

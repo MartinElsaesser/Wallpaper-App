@@ -7,16 +7,7 @@
     <div class="col-12 col-lg-6 col-md-8 offset-lg-3 offset-md-2">
       <div class="container-fluid p-0">
         <%- include("partials/show_card", {wallpaper}) %>
-        <form action="<%= commentLink %>" class="mt-4 mb-5" method="POST">
-          <div class="mb-3">
-            <label for="comment" class="form-label">Comment on Wallpaper</label>
-            <textarea class="form-control" id="comment" rows="3" name="comment[text]" required placeholder="type in comment ..." minlength="10"></textarea>
-            <!-- <textarea class="form-control" id="comment" rows="3" name="comment[text]" required placeholder="type in comment ..." minlength="10"></textarea> -->
-          </div>
-          <div class="d-grid">
-            <button class="btn btn-primary" type="submit" disabled id="comment-submit"><i class="fa-solid fa-comment"></i> Submit comment</button>
-          </div>
-        </form>
+        <%- include("partials/show_commentForm.ejs", {commentLink}) %>
         <% for(let comment of wallpaper.comments) { %>
         <%- include("partials/show_comment",{wallpaper, comment}) %>
         <% } %>

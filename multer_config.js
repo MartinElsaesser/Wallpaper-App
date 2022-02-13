@@ -11,7 +11,7 @@ const storage = multer.diskStorage({
 		const uuid = uuidv4();
 		cb(null, `${uuid}.${fileExtension}`)
 	},
-})
+});
 const uploadPictures = multer({
 	storage,
 	fileFilter: function (req, file, cb) {

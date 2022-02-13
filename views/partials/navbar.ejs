@@ -15,11 +15,13 @@
       </div>
       <div class="offcanvas-body">
         <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-          <% for(let {href, name, match} of routes) { %>
+          <% for(let {href, name, match, render} of routes) { %>
           <% let active = url.match(match) !== null && "active"; %>
+          <% if(render) { %>
           <li class="nav-item">
             <a class="nav-link <%= active %>" aria-current="page" href="<%= href %>"><%- name %></a>
           </li>
+          <% } %>
           <% } %>
         </ul>
         <hr>
