@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Wallpaper = require("../models/Wallpaper");
-const { wrap, FlashError } = require("../utils");
+const { wrap, FlashError, buildSearchQuery } = require("../utils");
 const uploadPictures = require("../multer_config");
 const absolutePath = require("path").join.bind(null, __dirname);
 const fs = require("fs");
@@ -10,21 +10,6 @@ const rm = promisify(fs.rm);
 const { validateWallpaperCreate, validateWallpaperEdit, validateImage } = require("../middleware");
 
 
-
-function buildSearchQuery(query) {
-	const devices = ["phone", "tablet", "desktop", "desktop-wide"];
-	const { device, description } = query;
-	const search = {
-		...(devices.includes(device) && { device }),
-		...(description && {
-			description: {
-				$regex: new RegExp(`${description}`, "i")
-			}
-		}
-		)
-	}
-	return search;
-}
 
 router.get("/", wrap(async (req, res) => {
 	// build search querry
@@ -55,11 +40,6 @@ router.get("/:id/download", wrap(async (req, res) => {
 	res.download(path, `${wallpaper.description}.${wallpaper.fileExtension}`);
 }));
 
-
-
-// TODO: 
-// * validate that form only submits images
-// * validate form fields
 router.post("/", uploadPictures.single("file"), validateWallpaperCreate, validateImage, wrap(async (req, res) => {
 	const { wallpaper } = req.body;
 	const { filename, mimetype } = req.file;

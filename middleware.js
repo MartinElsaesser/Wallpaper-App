@@ -20,8 +20,9 @@ function validateWallpaperCreate(req, res, next) {
 	const wallpaper = { ...req.body.wallpaper };
 	const { error, value } = wallpapers.validate(wallpaper);
 	let message = "Check your inputs";
+	console.log(req.file);
 	if (error) {
-		if (req.file) rm(absolutePath(`./public/images/${oldWallpaper.fileName}`));
+		if (req.file) rm(absolutePath(`./public/images/${req.file.filename}`));
 		next(new FlashError(message, "/wallpapers/new"));
 	}
 	next();
@@ -32,13 +33,11 @@ function validateWallpaperEdit(req, res, next) {
 	const { error, value } = wallpapers.validate(wallpaper);
 	let message = "Check your inputs";
 	if (error) {
-		if (req.file) rm(absolutePath(`./public/images/${oldWallpaper.fileName}`));
+		if (req.file) rm(absolutePath(`./public/images/${req.file.filename}`));
 		next(new FlashError(message, `/wallpapers/${req.params.id}/edit`));
 	}
 	next();
 }
-
-
 function setLocals(req, res, next) {
 	res.locals.h = h;
 	res.locals.errors = req.flash("error");
