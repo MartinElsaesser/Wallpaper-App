@@ -41,13 +41,16 @@ img.img-small {
 	outline: none;
 	box-shadow: none !important;
 	color:#dc3545;
+	transition: color 0.15s ease-in-out, transform 0.15s ease-in-out;
 }
 @media (hover: hover) {
 	.delete:hover {
 		color:#bb2d3b;
+		transform: scale(1.1);
 	}
 }
 .delete:active {
+	transform: scale(1.1);
 	color: #b02a37;
 }
 

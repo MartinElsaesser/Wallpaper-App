@@ -1,0 +1,20 @@
+<% layout("_layout") %>
+<%= errors[0] %>
+<div class="container pt-big pb-4 w-100 h-100">
+  <div class="d-flex w-100 h-100 justify-content-center align-items-center">
+    <div class="text-center pb-5">
+      <h1 class="display-5 fw-bold mb-4">Something went wrong here</h1>
+      <div class="col-lg-8 mx-auto">
+        <p class="lead mb-4">We could not reach the site you requested, check if it exists.</p>
+        <div class="fontawesome-big mb-4">
+          <i class="fa-solid fa-circle-exclamation"></i>
+        </div>
+        <div class="d-grid d-sm-flex justify-content-sm-center">
+          <a type="button" class="btn btn-primary btn-lg px-4 gap-3" href="javascript:history.back()">
+            <i class="fa-solid fa-arrow-left"></i> Go Back
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

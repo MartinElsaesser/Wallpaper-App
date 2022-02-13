@@ -10,11 +10,11 @@
         <form action="<%= commentLink %>" class="mt-4 mb-5" method="POST">
           <div class="mb-3">
             <label for="comment" class="form-label">Comment on Wallpaper</label>
-            <textarea class="form-control" id="comment" rows="3" name="comment[text]" required placeholder="type in comment ..."></textarea>
+            <textarea class="form-control" id="comment" rows="3" name="comment[text]" required placeholder="type in comment ..." minlength="10"></textarea>
             <!-- <textarea class="form-control" id="comment" rows="3" name="comment[text]" required placeholder="type in comment ..." minlength="10"></textarea> -->
           </div>
           <div class="d-grid">
-            <button class="btn btn-primary" type="submit">Submit comment</button>
+            <button class="btn btn-primary" type="submit" disabled id="comment-submit"><i class="fa-solid fa-comment"></i> Submit comment</button>
           </div>
         </form>
         <% for(let comment of wallpaper.comments) { %>
@@ -24,3 +24,5 @@
     </div>
   </div>
 </div>
+
+<% block('footer').append('<script src="/JS/comment.js"></script>') %>

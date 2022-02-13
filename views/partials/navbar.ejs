@@ -1,6 +1,6 @@
 <% let {description, device} = query %>
 
-<nav class="navbar navbar-light navbar-expand-xl bg-light fixed-top">
+<nav class="navbar navbar-light bg-light fixed-top">
   <div class="container-fluid">
     <a class="navbar-brand" href="/wallpapers">Wallpapers</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#navbar" aria-controls="navbar">
@@ -24,8 +24,8 @@
         </ul>
         <hr>
         <p class="d-xl-none">Search</p>
-        <form class="d-flex flex-xl-nowrap flex-wrap" method="get" action="/wallpapers">
-          <select name="device" class="form-select w-100 me-xl-2" aria-label="Default select example" id="device">
+        <form class="d-flex flex-wrap gap-2" method="get" action="/wallpapers">
+          <select name="device" class="form-select w-100" aria-label="Default select example" id="device">
             <option value="" <%= device === "" && "selected"%>>All devices</option>
             <option value="phone" <%= device === "phone" && "selected"%>>Mobile Phones</option>
             <option value="tablet" <%= device === "tablet" && "selected"%>>Tablets</option>

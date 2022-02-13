@@ -56,7 +56,7 @@ app.use((error, req, res, next) => {
 		return res.redirect(error.redirect);
 	}
 	console.error(error);
-	res.send("Error");
+	res.render("Error");
 });
 
 module.exports = app;
