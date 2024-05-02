@@ -5,15 +5,11 @@ const { promisify } = require("util");
 const rm = promisify(fs.rm);
 const absolutePath = require("path").join.bind(null, __dirname);
 
-// TODO: 
-// * add user
-// * add downloadFilename
-// * add filenameWithID (use filenameWithID or path)
-// * add file extension
 const wallpaperSchema = new Schema({
 	user: {
 		type: Schema.Types.ObjectId,
-		ref: "User"
+		ref: "User",
+		required: true
 	},
 	path: {
 		type: String,

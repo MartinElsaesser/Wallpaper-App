@@ -8,8 +8,8 @@ mongoose.connection.on('error', (err) => {
 });
 
 // initialize models
-require("./models/Comment");
-require("./models/Wallpaper");
+// require("./models/Comment");
+// require("./models/Wallpaper");
 
 const app = require('./app');
 app.set('port', process.env.PORT || 7777);

@@ -2,43 +2,42 @@ const mongoose = require("mongoose");
 require('dotenv').config();
 const Wallpaper = require("../models/Wallpaper");
 const Comment = require("../models/Comment");
+const User = require("../models/User");
 const fs = require("fs");
 const absolutePath = require("path").join.bind(null, __dirname);
 const { v4: uuidv4 } = require('uuid');
+const passport = require("passport")
+require("passport-local"); // YOU NEED THIS, DON'T DELETE IT OR IT WON'T WORK
+
+passport.use(User.createStrategy());
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 mongoose.connect(process.env.DATABASE);
 
-let user = "62094b79a0c1ec86f779967d";
 const comments = [
 	{
-		user,
 		text: "Really beautiful, indeed"
 	},
 	{
-		user,
 		text: "Great wallpaper, loving it."
 	},
 	{
-		user,
 		text: "This picture looks stunning"
 	},
 	{
-		user,
 		text: "Great pic, my friend"
 	},
 	{
-		user,
 		text: "I have seen better things"
 	},
 	{
-		user,
 		text: "I love nature"
 	},
 ];
 
 let wallpapers = [
 	{
-		user,
 		fileName: "amoled-phone.jpg",
 		path: "",
 		fileExtension: "jpg",
@@ -47,7 +46,6 @@ let wallpapers = [
 		comments: [0]
 	},
 	{
-		user,
 		fileName: "brick-wall.jpg",
 		path: "",
 		fileExtension: "jpg",
@@ -56,7 +54,6 @@ let wallpapers = [
 		comments: [1]
 	},
 	{
-		user,
 		fileName: "earth.jpg",
 		path: "",
 		fileExtension: "jpg",
@@ -65,7 +62,6 @@ let wallpapers = [
 		comments: [2, 3, 4]
 	},
 	{
-		user,
 		fileName: "ford.jpg",
 		path: "",
 		fileExtension: "jpg",
@@ -74,7 +70,6 @@ let wallpapers = [
 		comments: [3]
 	},
 	{
-		user,
 		fileName: "lamborghini.jpg",
 		path: "",
 		fileExtension: "jpg",
@@ -83,7 +78,6 @@ let wallpapers = [
 		comments: [4]
 	},
 	{
-		user,
 		fileName: "landscape.jpg",
 		path: "",
 		fileExtension: "jpg",
@@ -128,13 +122,21 @@ function populateImages() {
 void async function intoDB() {
 	await Wallpaper.deleteMany();
 	await Comment.deleteMany();
+	await User.deleteMany();
 
-	const insertedComments = await Comment.insertMany(comments);
+	const newUser = new User({ username: "john", email: "john@gmail.com" });
+	const insertedUser = await User.register(newUser, process.env.PASSWORD_DEFAULT_USER);
+
+	const commentsWithUser = comments.map(comment => ({ ...comment, user: insertedUser }));
+	const insertedComments = await Comment.insertMany(commentsWithUser);
+
+
 	const wallpapersWithImages = populateImages();
-	const wallpapersWithComments = wallpapersWithImages.map((wallpaper) => {
+	const fullyAssembledWallpaper = wallpapersWithImages.map((wallpaper) => {
 		wallpaper.comments = wallpaper.comments.map(commentI => insertedComments[commentI]);
+		wallpaper.user = insertedUser
 		return wallpaper;
 	})
-	await Wallpaper.insertMany(wallpapersWithComments);
+	await Wallpaper.insertMany(fullyAssembledWallpaper);
 	mongoose.disconnect();
 }()
